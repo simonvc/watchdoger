@@ -22,7 +22,7 @@ Configure it with the number of errors that should trigger an alert, and over wh
 ````
     w.Gates = []int{1, 10, 100, 500, 1000}                                                                    //alert me when each of these gates pass
     w.TTL = 15 * time.Second                                                                                   //where the events happened in the last 30 minutes
-    w.Address, _ = url.Parse("https://hooks.slack.com/services/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") //by posting to this addresss
+    w.Address, _ = url.Parse("https://hooks.slack.com/services/slackurl") //by posting to this addresss
     w.Description = "An Error occured!"
 ```
 
