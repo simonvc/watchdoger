@@ -1,4 +1,4 @@
-package main
+package watchdoger
 
 import (
 	"fmt"
