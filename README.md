@@ -1,6 +1,14 @@
+# Watchdoger
+
 A helpful pattern to send a notification to slack when something bad happens, in a non spammy way.
 
 Checkout example/main.go to see how to use it.
+
+Import it
+
+```
+import "github.com/simonvc/watchdoger"
+```
 
 
 Make a global Watch
