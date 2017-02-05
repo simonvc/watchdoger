@@ -73,7 +73,7 @@ func (w *Watch) Fire() {
 	// if the counter is in the list of gates
 	// fire the webhook
 	if contains(w.Gates, w.Current) {
-		slackMessage := fmt.Sprintf("%d x Error: %s in the last %s\n", w.Current, w.Description, humanizeDuration(w.TTL))
+		slackMessage := fmt.Sprintf("%d x %s in the last %s\n", w.Current, w.Description, humanizeDuration(w.TTL))
 		fmt.Println(slackMessage)
 		notifySlack(w, slackMessage)
 	}
