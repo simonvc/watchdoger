@@ -19,6 +19,7 @@ type Watch struct {
 	Address     *url.URL
 	Current     int
 	Description string
+	announced   bool //has an annoucememt been made
 }
 
 func notifySlack(w *Watch, s string) {
@@ -29,6 +30,7 @@ func notifySlack(w *Watch, s string) {
 		IconEmoji: ":gps-red:",
 	}
 	err := slack.Send(w.Address.String(), "", payload)
+	w.announced = true
 	if len(err) > 0 {
 		fmt.Printf("error: %s\n", err)
 	}
@@ -75,6 +77,7 @@ func (w *Watch) Fire() {
 	if contains(w.Gates, w.Current) {
 		slackMessage := fmt.Sprintf("%d x %s in the last %s\n", w.Current, w.Description, humanizeDuration(w.TTL))
 		fmt.Println(slackMessage)
+		w.announced = true
 		notifySlack(w, slackMessage)
 	}
 	// fire off a goroutine to reduce after w.ttl
@@ -87,7 +90,8 @@ func (w *Watch) extinguish() {
 	// decrement the counter
 	w.Current--
 	// if the counter < 1 fire the webhook to say allclear
-	if w.Current < 1 {
+	if w.Current < 1 && w.announced {
+		w.announced = false //reset this
 		slackMessage := fmt.Sprintf("All Clear: No %s seen in the last %s\n", w.Description, humanizeDuration(w.TTL))
 		fmt.Println(slackMessage)
 		notifySlack(w, slackMessage)
