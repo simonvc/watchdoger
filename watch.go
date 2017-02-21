@@ -19,7 +19,15 @@ type Watch struct {
 	Address     *url.URL
 	Current     int
 	Description string
+	Mute        bool
 	announced   bool //has an annoucememt been made
+}
+
+// Shush is intended to be go routine run mutes for 30 seconds
+func (w *Watch) Shush() {
+	w.Mute = true
+	time.Sleep(30 * time.Second)
+	w.Mute = false
 }
 
 func notifySlack(w *Watch, s string) {
@@ -29,9 +37,11 @@ func notifySlack(w *Watch, s string) {
 		Channel:   "#monitoring-test",
 		IconEmoji: ":gps-red:",
 	}
-	err := slack.Send(w.Address.String(), "", payload)
-	if len(err) > 0 {
-		fmt.Printf("error: %s\n", err)
+	if w.Mute != true {
+		err := slack.Send(w.Address.String(), "", payload)
+		if len(err) > 0 {
+			fmt.Printf("error: %s\n", err)
+		}
 	}
 }
 
