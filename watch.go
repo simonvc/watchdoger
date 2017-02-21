@@ -30,7 +30,6 @@ func notifySlack(w *Watch, s string) {
 		IconEmoji: ":gps-red:",
 	}
 	err := slack.Send(w.Address.String(), "", payload)
-	w.announced = true
 	if len(err) > 0 {
 		fmt.Printf("error: %s\n", err)
 	}
